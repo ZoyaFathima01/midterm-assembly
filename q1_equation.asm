@@ -30,5 +30,6 @@ main:
     call printf
     add esp, 8           ; Clean up stack
 
-    mov eax, 0
-    ret
+mov eax, 1       ; syscall number for exit
+xor ebx, ebx     ; exit code 0
+int 0x80         ; call Linux kernel to exit
