@@ -1,10 +1,8 @@
-; var1 = 10
-; var2 = 3
-; var3 = 7
-; result = (10 + 2) / (7 - 3) = 12 / 4 = 3
+; equation.asm
+; Calculate result = (var1 + 2) / (var3 - var2)
 
 section .data
-    msg db "Result is: %d", 10, 0     ; format string with newline
+    msg db "Result is: %d", 10, 0  ; format string for printf
     var1 dd 10
     var2 dd 3
     var3 dd 7
@@ -15,22 +13,22 @@ section .text
     extern printf
 
 main:
-    mov eax, [var1]      ; eax = var1
-    add eax, 2           ; eax = var1 + 2
+    mov eax, [var1]      ; eax = var1 (10)
+    add eax, 2           ; eax = var1 + 2 = 12
 
-    mov ebx, [var3]      
-    sub ebx, [var2]      ; ebx = var3 - var2
+    mov ebx, [var3]      ; ebx = var3 (7)
+    sub ebx, [var2]      ; ebx = var3 - var2 = 7 - 3 = 4
 
-    cdq                  ; sign extend eax into edx:eax
-    idiv ebx             ; eax = eax / ebx, edx = remainder
+    cdq                  ; sign extend eax to edx:eax (for division)
+    idiv ebx             ; divide edx:eax by ebx
 
-    mov [result], eax    ; store quotient in result
+    mov [result], eax    ; store quotient (3) in result
 
-    push eax             ; push quotient for printf
+    push eax             ; push quotient argument for printf
     push msg             ; push format string
     call printf          ; call printf
-    add esp, 8           ; clean stack after call
+    add esp, 8           ; clean up stack
 
-    mov eax, 1           ; syscall: exit
+    mov eax, 1           ; exit syscall number
     xor ebx, ebx         ; status 0
-    int 0x80             ; exit program
+    int 0x80             ; invoke kernel exit
